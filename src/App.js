@@ -1,9 +1,7 @@
 import './App.css';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { Form } from 'semantic-ui-react';
-import { Card, Icon, Image } from 'semantic-ui-react';
-import { Statistic } from 'semantic-ui-react';
+import { Card, Icon, Image, Statistic, Form } from 'semantic-ui-react';
 
 
 function App() {
@@ -16,7 +14,7 @@ function App() {
   const [error, setError] = useState(null);
   const [descrip, setDescription] = useState('');
   const [totalCount, setTotalCount] = useState('');
-  const [biggestRepo, setBiggestRepo] = useState('');
+  const [sizeRepo, setSizeRepo] = useState('');
 
   useEffect(()=> {
     fetch("https://api.github.com/organizations?since=2")
@@ -34,14 +32,6 @@ function App() {
         numberOfOrganizations(data)
       })
   },[]);
-
-  // useEffect(()=> {
-  //   fetch(`https://api.github.com/orgs/ogc/repos`)
-  //     .then(res=> res.json())
-  //     .then(data => {
-  //       biggestRepository(data)
-  //     })
-  // },[]);
 
   const setData = ({name, login, public_repos, total_private_repos, avatar_url, description}) => {
     setName(name)
@@ -61,6 +51,12 @@ function App() {
     fetch(`https://api.github.com/orgs/${userInput}`)
     .then(res => res.json())
     .then(data => {
+      if(data.message) {
+        setError(data.message)
+      }
+      else {
+        setData(data)
+      }
       setData(data)
     })
   }
@@ -68,20 +64,15 @@ function App() {
     setTotalCount(total_count)
   }
 
-  const biggestRepository = ({login, size}) => {
-    setUsername(login)
-    setBiggestRepo(size)
-  }
-  
   return (
     
     <div>
       <div className="navbar">Github Search</div>
       <div className="container">
       <Statistic horizontal>
-    <Statistic.Value>{totalCount}</Statistic.Value>
-    <Statistic.Label>Organizations</Statistic.Label>
-  </Statistic>
+        <Statistic.Value>{totalCount}</Statistic.Value>
+        <Statistic.Label>Organizations</Statistic.Label>
+      </Statistic>
       </div>
       <div className="search">
       <Form onSubmit={handleSubmit}>
@@ -94,6 +85,7 @@ function App() {
           </Form.Group>
         </Form>
       </div>
+      {error ? (<h1>{error}</h1>) : (
       <div className="card">
         <Card>
           <Image src={avatar} wrapped ui={false} />
@@ -103,8 +95,6 @@ function App() {
             <Card.Description>
             <Card.Header>{descrip}</Card.Header>
             </Card.Description>
-            <Card.Header>{biggestRepo}</Card.Header>
-
           </Card.Content>
           <Card.Content extra>
             <a>
@@ -112,8 +102,8 @@ function App() {
               {[publicRepository] + [privateRepository]} Repositories
             </a>
           </Card.Content>
-    </Card> 
-      </div>
+        </Card> 
+      </div>)}
     </div>
   );
 }
