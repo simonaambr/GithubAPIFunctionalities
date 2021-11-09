@@ -1,6 +1,6 @@
 # GithubAPIFunctionalities
 
-An application where you can see how many Organizations are on Github and also search Organizations that are on it and see number of repositories and the biggest repository in that organization.
+An application where you can see how many Organizations are on Github and also search Organizations that are on it and see number of repositories.
 Built with React, JavaScript, and CSS.
 
 ## Project Screen Shot(s)
