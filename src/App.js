@@ -14,7 +14,6 @@ function App() {
   const [error, setError] = useState(null);
   const [descrip, setDescription] = useState('');
   const [totalCount, setTotalCount] = useState('');
-  const [sizeRepo, setSizeRepo] = useState('');
 
   useEffect(()=> {
     fetch("https://api.github.com/organizations?since=2")
